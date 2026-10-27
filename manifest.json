@@ -1,6 +1,6 @@
 {
-  "name": "Ploy Money Diary",
-  "short_name": "Ploy Money",
+  "name": "Narmpoii",
+  "short_name": "Narmpoii",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

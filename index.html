@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#101114">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Ploy Money">
+<meta name="apple-mobile-web-app-title" content="Narmpoii">
 <link rel="manifest" href="manifest.json">
-<title>Ploy Money Diary</title>
+<title>Narmpoii</title>
 <style>
 :root{--bg:#101114;--panel:#191a20;--panel2:#202128;--line:#30313a;--text:#f6f3ef;--muted:#a5a4ae;--gold:#d8b978;--green:#79d7ae;--red:#ff8f91;--radius:20px}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#24232a 0,#101114 50%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);font-size:15px}
@@ -19,7 +19,7 @@
 <body>
 <div class="app">
 <header class="top">
- <div class="brand"><div class="logo">฿</div><div><div class="eyebrow">PERSONAL FINANCE</div><h1>Ploy Money Diary</h1></div></div>
+ <div class="brand"><div class="logo">฿</div><div><div class="eyebrow">PERSONAL FINANCE</div><h1>Narmpoii</h1></div></div>
  <input id="monthPicker" class="month" type="month" aria-label="เลือกเดือน">
 </header>
 <section class="card hero">
@@ -34,7 +34,7 @@
  <div class="notice" id="heroNotice">งบตั้งต้นของพลอย · ยอดนี้คือวงเงินหมวดรายจ่ายที่ยังไม่ถูกบันทึกว่าใช้ไป</div>
 </section>
 <div class="tabs" id="tabs">
- <button class="tab active" data-page="overview">ภาพรวม</button><button class="tab" data-page="add">+ บันทึกรายการ</button><button class="tab" data-page="history">ประวัติ</button><button class="tab" data-page="settings">ตั้งค่า</button>
+ <button class="tab active" data-page="overview">ภาพรวม</button><button class="tab" data-page="add">+ บันทึกรายการ</button><button class="tab" data-page="history">ประวัติ</button><button class="tab" data-page="report">รายงาน</button><button class="tab" data-page="settings">ตั้งค่า</button>
 </div>
 <section id="overviewPage">
  <div class="section-title"><h2>งบประมาณแต่ละหมวด</h2><span>ยอดใช้จริง / งบที่ตั้ง</span></div>
@@ -62,6 +62,32 @@
  <div class="card"><div class="field"><label for="filter">ค้นหาหรือกรองรายการ</label><input id="filter" placeholder="ค้นหาหมวด หมายเหตุ หรือบัญชี"></div><div id="historyList"></div></div>
  <div class="actions"><button class="secondary" id="exportBtn">ส่งออกข้อมูลสำรอง JSON</button><button class="secondary" id="csvBtn">ส่งออก CSV</button></div>
 </section>
+<section id="reportPage" class="hidden">
+ <div class="section-title"><h2>รายงานการเงิน</h2><span>สรุปจากรายการที่บันทึกจริง</span></div>
+ <div class="card">
+  <div class="formgrid">
+   <div class="field"><label for="reportPeriod">ช่วงรายงาน</label><select id="reportPeriod"><option value="month">รายเดือน</option><option value="3months">ย้อนหลัง 3 เดือน</option></select></div>
+   <div class="field"><label for="reportMonth">เดือนอ้างอิง</label><input id="reportMonth" type="month"></div>
+  </div>
+  <div class="alertline" id="reportRange"></div>
+ </div>
+ <div class="stats" style="margin-bottom:14px">
+  <div class="stat"><div class="label">รายรับที่บันทึก</div><strong class="green" id="reportIncome">฿0</strong></div>
+  <div class="stat"><div class="label">รายจ่ายจริง</div><strong id="reportExpense">฿0</strong></div>
+  <div class="stat"><div class="label">เงินออมที่บันทึก</div><strong class="gold" id="reportSaving">฿0</strong></div>
+  <div class="stat"><div class="label">เหลือหลังรายจ่ายและออม</div><strong id="reportBalance">฿0</strong></div>
+ </div>
+ <div class="section-title"><h2>เปรียบเทียบรายเดือน</h2><span>รายรับ / รายจ่าย / ออม</span></div>
+ <div class="card" id="reportMonthlyCompare"></div>
+ <div class="section-title"><h2>งบประมาณแต่ละหมวด</h2><span>กดหมวดเพื่อดูรายการ</span></div>
+ <div class="card" id="reportBudgetList"></div>
+ <div class="section-title"><h2>รายละเอียดรายการ</h2><span id="reportDetailCount">0 รายการ</span></div>
+ <div class="card">
+  <div class="field"><label for="reportCategoryFilter">กรองตามหมวดหมู่</label><select id="reportCategoryFilter"><option value="all">ทุกหมวด</option></select></div>
+  <div id="reportDetails"></div>
+  <div class="actions"><button class="primary" id="reportCsvBtn">ส่งออกรายงาน CSV</button></div>
+ </div>
+</section>
 <section id="settingsPage" class="hidden">
  <div class="section-title"><h2>ตั้งค่างบประมาณ</h2><span>แก้ไขได้ตามจริง</span></div>
  <form class="card" id="settingsForm">
@@ -82,9 +108,9 @@
   <div class="actions"><button class="secondary" id="importBtn">นำเข้าข้อมูลสำรอง</button><button class="danger" id="clearBtn">ลบข้อมูลทั้งหมด</button></div><input id="importFile" type="file" accept="application/json" class="hidden">
  </div>
 </section>
-<div class="footer">Ploy Money Diary · ข้อมูลเก็บในเบราว์เซอร์นี้ · ไม่มีการเชื่อมต่อบัญชีธนาคารอัตโนมัติ</div>
+<div class="footer">Narmpoii · ข้อมูลเก็บในเบราว์เซอร์นี้ · ไม่มีการเชื่อมต่อบัญชีธนาคารอัตโนมัติ</div>
 </div>
-<nav class="bottomnav"><button class="active" data-page="overview"><span>⌂</span>ภาพรวม</button><button data-page="add"><span>＋</span>บันทึก</button><button data-page="history"><span>▤</span>ประวัติ</button><button data-page="settings"><span>⚙</span>ตั้งค่า</button></nav>
+<nav class="bottomnav"><button class="active" data-page="overview"><span>⌂</span>ภาพรวม</button><button data-page="add"><span>＋</span>บันทึก</button><button data-page="history"><span>▤</span>ประวัติ</button><button data-page="report"><span>▥</span>รายงาน</button><button data-page="settings"><span>⚙</span>ตั้งค่า</button></nav>
 <script>
 const KEY='ployMoneyDiary_v1';
 const defaultBudgets=[
@@ -151,7 +177,7 @@ function renderSettings(){
  $('salary').value=state.salary;$('saveGoal').value=state.savingGoal;
  $('budgetInputs').innerHTML=state.budgets.map((b,i)=>`<div class="field" style="margin:10px 0"><label for="bud${i}">${esc(b.name)}</label><input id="bud${i}" type="number" min="0" step="1" value="${b.amount}" data-budget="${i}"></div>`).join('');
 }
-function render(){renderHero();renderBudgets();renderLists();renderSettings();fillCategories();checkAlerts()}
+function render(){renderHero();renderBudgets();renderLists();renderSettings();fillCategories();checkAlerts();if(currentPage==='report')renderReport()}
 function fillCategories(){
  let typ=$('type').value, list=typ==='income'?['เงินเดือน','อื่นๆ']:typ==='saving'?['เงินออม']:cats.filter(c=>c!=='เงินเดือน'&&c!=='เงินออม');
  const old=$('category').value;
@@ -160,7 +186,8 @@ function fillCategories(){
 }
 function setPage(page){
  currentPage=page;
- ['overview','add','history','settings'].forEach(p=>$(p+'Page').classList.toggle('hidden',p!==page));
+ ['overview','add','history','report','settings'].forEach(p=>$(p+'Page').classList.toggle('hidden',p!==page));
+ if(page==='report')renderReport();
  document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
  if(page==='add'){$('date').value=$('date').value||today()}
  window.scrollTo({top:0,behavior:'smooth'});
@@ -179,6 +206,49 @@ $('txForm').onsubmit=e=>{
 };
 $('settingsForm').onsubmit=e=>{e.preventDefault();state.salary=Math.max(0,Number($('salary').value)||0);state.savingGoal=Math.max(0,Number($('saveGoal').value)||0);state.budgets=state.budgets.map((b,i)=>({...b,amount:Math.max(0,Number($('bud'+i).value)||0)}));persist();alert('บันทึกงบประมาณแล้วค่ะ')};
 $('filter').oninput=renderLists;
+function reportMonths(){
+ const anchor=$('reportMonth').value||monthNow();
+ const [yy,mm]=anchor.split('-').map(Number); const out=[];
+ const count=$('reportPeriod').value==='3months'?3:1;
+ for(let i=count-1;i>=0;i--){const d=new Date(yy,mm-1-i,1);out.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`)}
+ return out;
+}
+function reportTransactions(){const months=reportMonths();return state.transactions.filter(t=>t.date&&months.includes(t.date.slice(0,7))).slice().sort((a,b)=>b.date.localeCompare(a.date)||(b.created||0)-(a.created||0));}
+function reportLabel(month){const [y,m]=month.split('-').map(Number);return new Date(y,m-1,1).toLocaleDateString('th-TH',{month:'short',year:'2-digit'});}
+function reportSum(rows,type){return rows.filter(t=>t.type===type).reduce((s,t)=>s+Number(t.amount||0),0)}
+function reportBudgetSpent(b,rows){return rows.filter(t=>t.type==='expense'&&(t.category===b.category||(b.id==='home'&&t.category==='บิลอื่น'&&/ห้อง|ค่าเช่า|น้ำ|ไฟ/i.test(t.note||'')))).reduce((s,t)=>s+Number(t.amount||0),0)}
+function renderReport(){
+ if(!$('reportMonth'))return;
+ if(!$('reportMonth').value)$('reportMonth').value=monthNow();
+ const months=reportMonths(), rows=reportTransactions(), income=reportSum(rows,'income'), expense=reportSum(rows,'expense'), saving=reportSum(rows,'saving');
+ $('reportRange').textContent=months.length===1?`ช่วงรายงาน: ${reportLabel(months[0])}`:`ช่วงรายงาน: ${reportLabel(months[0])} – ${reportLabel(months[months.length-1])}`;
+ $('reportIncome').textContent=money(income);$('reportExpense').textContent=money(expense);$('reportSaving').textContent=money(saving);
+ $('reportBalance').textContent=money(income-expense-saving);$('reportBalance').className=''+(income-expense-saving<0?'red':'');
+ const monthly=months.map(m=>{const mr=rows.filter(t=>t.date.slice(0,7)===m);return {month:m,income:reportSum(mr,'income'),expense:reportSum(mr,'expense'),saving:reportSum(mr,'saving')}});
+ $('reportMonthlyCompare').innerHTML=monthly.map(m=>`<div class="budgetrow"><div class="budgettop"><div class="budgetname">${esc(reportLabel(m.month))}</div><div class="budgetamount">สุทธิ <b>${money(m.income-m.expense-m.saving)}</b></div></div><div class="alertline green">รายรับ ${money(m.income)}</div><div class="alertline red">รายจ่าย ${money(m.expense)}</div><div class="alertline gold">เงินออม ${money(m.saving)}</div></div>`).join('');
+ const budgetRows=state.budgets.map(b=>{const spent=reportBudgetSpent(b,rows),budget=Number(b.amount||0)*months.length,pct=budget?Math.min(100,spent/budget*100):0,over=spent>budget;return `<div class="budgetrow"><button class="secondary report-category" data-category="${esc(b.category)}" style="width:100%;text-align:left;padding:10px;background:transparent;border:0"><div class="budgettop"><div class="budgetname">${b.icon||'•'} ${esc(b.name)}</div><div class="budgetamount"><b class="${over?'red':''}">${money(spent)}</b> / ${money(budget)}</div></div><div class="progress"><i style="width:${pct}%;${over?'background:linear-gradient(90deg,#b9444a,#ff9a9d)':''}"></i></div><div class="alertline">${over?'เกินงบ '+money(spent-budget):'เหลืองบ '+money(budget-spent)} · ${Math.round(pct)}% · แตะเพื่อดูรายการ</div></button></div>`}).join('');
+ $('reportBudgetList').innerHTML=budgetRows||'<div class="empty">ยังไม่มีงบประมาณ</div>';
+ const filter=$('reportCategoryFilter');const old=filter.value;const catsFound=[...new Set([...cats,...rows.map(t=>t.category).filter(Boolean)])];filter.innerHTML='<option value="all">ทุกหมวด</option>'+catsFound.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(catsFound.includes(old))filter.value=old;else filter.value='all';
+ renderReportDetails();
+ document.querySelectorAll('.report-category').forEach(btn=>btn.onclick=()=>{filter.value=btn.dataset.category;renderReportDetails();$('reportDetails').scrollIntoView({behavior:'smooth',block:'start'})});
+}
+function renderReportDetails(){
+ const rows=reportTransactions(),cat=$('reportCategoryFilter').value;
+ const filtered=cat==='all'?rows:rows.filter(t=>t.category===cat);
+ $('reportDetailCount').textContent=filtered.length+' รายการ';
+ $('reportDetails').innerHTML=filtered.length?filtered.map(t=>txHTML(t,false)).join(''):'<div class="empty">ไม่มีรายการในช่วงที่เลือก</div>';
+}
+function exportReportCSV(){
+ const months=reportMonths(),rows=reportTransactions(),out=[['section','period','date','type','amount','category','budget','account','note']];
+ out.push(['summary',months.join(' to '),'','income',reportSum(rows,'income'),'','','','รายรับที่บันทึก']);
+ out.push(['summary',months.join(' to '),'','expense',reportSum(rows,'expense'),'','','','รายจ่ายจริง']);
+ out.push(['summary',months.join(' to '),'','saving',reportSum(rows,'saving'),'','','','เงินออมที่บันทึก']);
+ out.push(['summary',months.join(' to '),'','balance',reportSum(rows,'income')-reportSum(rows,'expense')-reportSum(rows,'saving'),'','','','เหลือหลังรายจ่ายและออม']);
+ state.budgets.forEach(b=>out.push(['budget',months.join(' to '),'','expense',reportBudgetSpent(b,rows),b.name,Number(b.amount||0)*months.length,'','งบรวมช่วงรายงาน']));
+ rows.forEach(t=>out.push(['transaction',months.join(' to '),t.date,t.type,t.amount,t.category,'',t.account,t.note||'']));
+ const csv=out.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download=`narmpoii-report-${months[0]}-${months[months.length-1]}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
 function notify(title,body){
  if('Notification'in window&&Notification.permission==='granted'){try{new Notification(title,{body,icon:'icon-192.png'})}catch(e){}}
 }
@@ -194,18 +264,19 @@ function checkAlerts(){
 }
 $('notifyBtn').onclick=async()=>{
  if(!('Notification'in window)){$('notifyStatus').textContent='เบราว์เซอร์นี้ไม่รองรับ Notification';return}
- try{let p=await Notification.requestPermission();$('notifyStatus').textContent=p==='granted'?'เปิดการแจ้งเตือนแล้วค่ะ (การเตือนงบตรวจเมื่อเปิดเว็บ)':'ยังไม่ได้อนุญาตการแจ้งเตือน';if(p==='granted')notify('Ploy Money Diary','เปิดการแจ้งเตือนเรียบร้อย')}
+ try{let p=await Notification.requestPermission();$('notifyStatus').textContent=p==='granted'?'เปิดการแจ้งเตือนแล้วค่ะ (การเตือนงบตรวจเมื่อเปิดเว็บ)':'ยังไม่ได้อนุญาตการแจ้งเตือน';if(p==='granted')notify('Narmpoii','เปิดการแจ้งเตือนเรียบร้อย')}
  catch(e){$('notifyStatus').textContent='ไม่สามารถขอสิทธิ์แจ้งเตือนได้ในโหมดนี้'}
 };
-$('testNotify').onclick=()=>notify('ทดสอบแจ้งเตือน','นี่คือตัวอย่างการแจ้งเตือนจาก Ploy Money Diary');
+$('testNotify').onclick=()=>notify('ทดสอบแจ้งเตือน','นี่คือตัวอย่างการแจ้งเตือนจาก Narmpoii');
 $('exportBtn').onclick=()=>{
- const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ploy-money-backup-'+selectedMonth()+'.json';a.click();URL.revokeObjectURL(a.href);
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='narmpoii-backup-'+selectedMonth()+'.json';a.click();URL.revokeObjectURL(a.href);
 };
 $('csvBtn').onclick=()=>{
  const rows=[['date','type','amount','category','account','note'],...txMonth().map(t=>[t.date,t.type,t.amount,t.category,t.account,t.note])];
  const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
- const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='ploy-money-'+selectedMonth()+'.csv';a.click();URL.revokeObjectURL(a.href);
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='narmpoii-'+selectedMonth()+'.csv';a.click();URL.revokeObjectURL(a.href);
 };
+$('reportMonth').value=monthNow();$('reportPeriod').onchange=renderReport;$('reportMonth').onchange=renderReport;$('reportCategoryFilter').onchange=renderReportDetails;$('reportCsvBtn').onclick=exportReportCSV;
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!data.budgets||!data.transactions)throw Error();if(confirm('นำเข้าข้อมูลจะแทนที่ข้อมูลปัจจุบัน ต้องการทำต่อไหม?')){state=data;persist();alert('นำเข้าข้อมูลสำเร็จ')}}catch(err){alert('ไฟล์สำรองไม่ถูกต้อง')}e.target.value=''};
 $('clearBtn').onclick=()=>{if(confirm('แน่ใจหรือไม่ว่าจะลบรายการและงบทั้งหมดในเครื่องนี้? แนะนำส่งออกข้อมูลสำรองก่อน')){state=fresh();persist();alert('ล้างข้อมูลแล้ว')}};
