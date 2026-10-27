@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101114">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ploy Money">
+<link rel="manifest" href="manifest.json">
+<title>Ploy Money Diary</title>
+<style>
+:root{--bg:#101114;--panel:#191a20;--panel2:#202128;--line:#30313a;--text:#f6f3ef;--muted:#a5a4ae;--gold:#d8b978;--green:#79d7ae;--red:#ff8f91;--radius:20px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#24232a 0,#101114 50%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);font-size:15px}
+.app{max-width:760px;margin:auto;padding:22px 16px 105px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.brand{display:flex;gap:12px;align-items:center}.logo{width:45px;height:45px;border-radius:15px;background:linear-gradient(135deg,#f1d9a0,#98733d);display:grid;place-items:center;color:#191611;font-size:22px;font-weight:800;box-shadow:0 8px 24px #0005}.eyebrow{color:var(--gold);font-size:11px;letter-spacing:2px;font-weight:700}.brand h1{font-size:20px;margin:3px 0 0}.month{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px;color:var(--text);max-width:145px}
+.card{background:linear-gradient(145deg,#202127,#17181d);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:0 12px 30px #0002}.hero{background:linear-gradient(135deg,#30291e,#1b1b20 65%);border-color:#64543a}.label{color:var(--muted);font-size:12px}.big{font-size:32px;font-weight:750;letter-spacing:-.7px;margin:8px 0}.gold{color:var(--gold)}.green{color:var(--green)}.red{color:var(--red)}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:#ffffff06;border:1px solid #ffffff0c;border-radius:15px;padding:13px}.stat strong{display:block;font-size:19px;margin-top:7px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:24px 2px 12px}.section-title h2{font-size:16px;margin:0}.section-title span{color:var(--muted);font-size:12px}.progress{height:7px;background:#34343d;border-radius:99px;overflow:hidden;margin-top:9px}.progress i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#b99755,#f0d89c)}.budgetrow{padding:13px 0;border-bottom:1px solid #ffffff0d}.budgetrow:last-child{border:0}.budgettop{display:flex;justify-content:space-between;gap:10px}.budgetname{font-weight:600}.budgetamount{font-size:13px;color:var(--muted);text-align:right}.budgetamount b{color:var(--text)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;background:#101115;color:var(--text);border:1px solid #393a44;border-radius:12px;padding:12px;font:inherit;outline:none;min-height:44px}input:focus,select:focus,textarea:focus{border-color:var(--gold)}button{border:0;border-radius:13px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}.primary{background:linear-gradient(135deg,#e8cf95,#b28a4d);color:#1b1710}.secondary{background:#2a2b33;color:var(--text);border:1px solid #41424d}.danger{color:var(--red);background:#432528}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}.tabs{display:flex;gap:8px;overflow:auto;margin:14px 0}.tab{white-space:nowrap;background:#1c1d23;border:1px solid var(--line);color:var(--muted);padding:10px 14px;border-radius:999px}.tab.active{background:#3a3121;border-color:#8e7547;color:#f3d99f}.transaction{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #ffffff0d}.transaction:last-child{border:0}.txicon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:#292a31;font-size:19px;flex-shrink:0}.txmain{flex:1;min-width:0}.txmain b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.txmain small{color:var(--muted)}.txamount{text-align:right;font-weight:700;white-space:nowrap}.empty{padding:25px 10px;text-align:center;color:var(--muted)}.notice{background:#28251e;border:1px solid #655537;color:#f0dba7;border-radius:13px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px}.footer{color:#777781;font-size:11px;text-align:center;margin-top:25px;line-height:1.7}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#141519ed;backdrop-filter:blur(18px);border-top:1px solid #30313a;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:8px;z-index:5}.bottomnav button{background:transparent;color:var(--muted);font-size:12px;flex:1;max-width:180px;padding:8px 3px}.bottomnav button span{display:block;font-size:19px;margin-bottom:3px}.bottomnav button.active{color:var(--gold)}.hidden{display:none!important}.pill{display:inline-block;border:1px solid #55505a;border-radius:99px;padding:4px 8px;font-size:11px;color:var(--muted)}.alertline{font-size:12px;margin-top:8px;color:var(--muted)}@media(min-width:600px){.app{padding:30px 24px 110px}.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.big{font-size:38px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">฿</div><div><div class="eyebrow">PERSONAL FINANCE</div><h1>Ploy Money Diary</h1></div></div>
+ <input id="monthPicker" class="month" type="month" aria-label="เลือกเดือน">
+</header>
+<section class="card hero">
+ <div class="label">งบรายจ่ายที่ยังใช้ได้เดือนนี้</div>
+ <div class="big gold" id="available">฿1,171</div>
+ <div class="stats">
+  <div class="stat"><div class="label">รายรับสุทธิ</div><strong id="income">฿28,351</strong></div>
+  <div class="stat"><div class="label">จ่ายจริงเดือนนี้</div><strong id="spent">฿0</strong></div>
+  <div class="stat"><div class="label">เป้าหมายออม</div><strong id="savingTarget">฿1,500</strong></div>
+  <div class="stat"><div class="label">ออมแล้ว</div><strong class="green" id="saved">฿0</strong></div>
+ </div>
+ <div class="notice" id="heroNotice">งบตั้งต้นของพลอย · ยอดนี้คือวงเงินหมวดรายจ่ายที่ยังไม่ถูกบันทึกว่าใช้ไป</div>
+</section>
+<div class="tabs" id="tabs">
+ <button class="tab active" data-page="overview">ภาพรวม</button><button class="tab" data-page="add">+ บันทึกรายการ</button><button class="tab" data-page="history">ประวัติ</button><button class="tab" data-page="settings">ตั้งค่า</button>
+</div>
+<section id="overviewPage">
+ <div class="section-title"><h2>งบประมาณแต่ละหมวด</h2><span>ยอดใช้จริง / งบที่ตั้ง</span></div>
+ <div class="card" id="budgetList"></div>
+ <div class="section-title"><h2>รายการล่าสุด</h2><button class="secondary" id="viewAll" style="padding:7px 10px;font-size:12px">ดูทั้งหมด</button></div>
+ <div class="card" id="recentList"></div>
+</section>
+<section id="addPage" class="hidden">
+ <div class="section-title"><h2>บันทึกรายการใหม่</h2><span>บันทึกในเครื่องนี้</span></div>
+ <form class="card" id="txForm">
+  <div class="formgrid">
+   <div class="field"><label for="type">ประเภท</label><select id="type"><option value="expense">รายจ่าย</option><option value="income">รายรับ</option><option value="saving">ออมเงิน</option></select></div>
+   <div class="field"><label for="amount">จำนวนเงิน (บาท)</label><input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></div>
+   <div class="field"><label for="category">หมวดหมู่</label><select id="category"></select></div>
+   <div class="field"><label for="account">บัญชี / วิธีจ่าย</label><select id="account"><option>เงินสด</option><option>TTB</option><option>SCB</option></select></div>
+   <div class="field"><label for="date">วันที่</label><input id="date" type="date" required></div>
+   <div class="field"><label for="note">หมายเหตุ (ไม่บังคับ)</label><input id="note" maxlength="90" placeholder="เช่น ข้าวกลางวัน"></div>
+  </div>
+  <div class="actions"><button class="primary" type="submit">บันทึกรายการ</button><button class="secondary" type="reset" id="resetForm">ล้างข้อมูล</button></div>
+  <div class="alertline">การบันทึกนี้ไม่ได้ดึงข้อมูลธนาคารอัตโนมัติ กรุณาบันทึกรายการจาก TTB / SCB ด้วยตนเอง</div>
+ </form>
+</section>
+<section id="historyPage" class="hidden">
+ <div class="section-title"><h2>ประวัติรายการ</h2><span id="historyCount">0 รายการ</span></div>
+ <div class="card"><div class="field"><label for="filter">ค้นหาหรือกรองรายการ</label><input id="filter" placeholder="ค้นหาหมวด หมายเหตุ หรือบัญชี"></div><div id="historyList"></div></div>
+ <div class="actions"><button class="secondary" id="exportBtn">ส่งออกข้อมูลสำรอง JSON</button><button class="secondary" id="csvBtn">ส่งออก CSV</button></div>
+</section>
+<section id="settingsPage" class="hidden">
+ <div class="section-title"><h2>ตั้งค่างบประมาณ</h2><span>แก้ไขได้ตามจริง</span></div>
+ <form class="card" id="settingsForm">
+  <div class="formgrid">
+   <div class="field full"><label for="salary">รายรับสุทธิต่อเดือน</label><input id="salary" type="number" min="0" required></div>
+   <div class="field full"><label for="saveGoal">เป้าหมายออมต่อเดือน</label><input id="saveGoal" type="number" min="0" required></div>
+  </div>
+  <div class="section-title"><h2>งบแยกหมวด</h2></div><div id="budgetInputs"></div>
+  <button class="primary" type="submit" style="width:100%;margin-top:14px">บันทึกงบประมาณ</button>
+ </form>
+ <div class="card">
+  <h3 style="margin-top:0">การแจ้งเตือน</h3><p class="label" style="line-height:1.7">เปิดการแจ้งเตือนเพื่อรับการเตือนขณะใช้งานเว็บหรือเมื่อเว็บรองรับการแจ้งเตือนในอุปกรณ์นี้ ทั้งนี้การเตือนงบจะตรวจเมื่อเปิดเว็บ และไม่ใช่ Push Notification จากเซิร์ฟเวอร์</p>
+  <div class="actions"><button class="primary" id="notifyBtn">เปิดการแจ้งเตือน</button><button class="secondary" id="testNotify">ทดสอบแจ้งเตือน</button></div><div id="notifyStatus" class="alertline"></div>
+  <div class="notice">หมายเหตุ iPhone: หากติดตั้งเว็บเป็นแอปจาก Safari ด้วย “เพิ่มไปยังหน้าจอโฮม” และเปิดผ่านไอคอน อาจรองรับการแจ้งเตือนเว็บบน iOS 16.4 ขึ้นไปเมื่ออนุญาตแล้ว แต่การแจ้งเตือน Push จริงแม้ไม่ได้เปิดเว็บต้องมีระบบเซิร์ฟเวอร์ Push เพิ่มเติม ซึ่งชุดนี้ยังไม่มี</div>
+ </div>
+ <div class="card">
+  <h3 style="margin-top:0">ข้อมูลและความเป็นส่วนตัว</h3><p class="label" style="line-height:1.7">ข้อมูลรายการเก็บในพื้นที่จัดเก็บของเบราว์เซอร์เครื่องนี้ ไม่ต้องสมัครสมาชิก ข้อมูลอาจหายหากล้างข้อมูลเว็บไซต์หรือเปลี่ยนเครื่อง กรุณาส่งออก JSON เก็บสำรองเป็นระยะ</p>
+  <div class="actions"><button class="secondary" id="importBtn">นำเข้าข้อมูลสำรอง</button><button class="danger" id="clearBtn">ลบข้อมูลทั้งหมด</button></div><input id="importFile" type="file" accept="application/json" class="hidden">
+ </div>
+</section>
+<div class="footer">Ploy Money Diary · ข้อมูลเก็บในเบราว์เซอร์นี้ · ไม่มีการเชื่อมต่อบัญชีธนาคารอัตโนมัติ</div>
+</div>
+<nav class="bottomnav"><button class="active" data-page="overview"><span>⌂</span>ภาพรวม</button><button data-page="add"><span>＋</span>บันทึก</button><button data-page="history"><span>▤</span>ประวัติ</button><button data-page="settings"><span>⚙</span>ตั้งค่า</button></nav>
+<script>
+const KEY='ployMoneyDiary_v1';
+const defaultBudgets=[
+ {id:'home',name:'ห้อง + น้ำ + ไฟ',amount:10000,icon:'⌂',category:'บิลอื่น'},
+ {id:'travel',name:'เดินทางวันทำงาน',amount:2860,icon:'🚆',category:'เดินทาง'},
+ {id:'food',name:'อาหารวันทำงาน',amount:6820,icon:'🍱',category:'อาหาร'},
+ {id:'weekend',name:'ค่าใช้จ่ายวันหยุด',amount:2000,icon:'☕',category:'เที่ยวสังคม'},
+ {id:'bills',name:'โทรศัพท์และบิลอื่น',amount:4000,icon:'▣',category:'บิลอื่น'},
+ {id:'beauty',name:'สกินแคร์และความงาม',amount:300,icon:'✦',category:'สกินแคร์'},
+ {id:'coffee',name:'กาแฟและขนม',amount:200,icon:'☕',category:'กาแฟขนม'},
+ {id:'shopping',name:'ช้อปปิ้ง',amount:200,icon:'◇',category:'ช้อปปิ้ง'},
+ {id:'social',name:'สังคม/เที่ยวเพิ่มเติม',amount:200,icon:'♡',category:'เที่ยวสังคม'},
+ {id:'misc',name:'เงินสำรองจิปาถะ',amount:271,icon:'＋',category:'บิลอื่น'}
+];
+const cats=['อาหาร','เดินทาง','ช้อปปิ้ง','กาแฟขนม','เที่ยวสังคม','สกินแคร์','บิลอื่น','เงินออม','เงินเดือน','อื่นๆ'];
+const icons={'อาหาร':'🍱','เดินทาง':'🚆','ช้อปปิ้ง':'🛍️','กาแฟขนม':'☕','เที่ยวสังคม':'♡','สกินแคร์':'✦','บิลอื่น':'▣','เงินออม':'🐷','เงินเดือน':'✦','อื่นๆ':'＋'};
+const money=n=>'฿'+Number(n||0).toLocaleString('th-TH',{maximumFractionDigits:2});
+const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const monthNow=()=>today().slice(0,7);
+function fresh(){return {salary:28351,savingGoal:1500,budgets:defaultBudgets,transactions:[],alerts:true}}
+let state;
+try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){state=fresh()}
+if(!state.budgets)state.budgets=defaultBudgets;if(!state.transactions)state.transactions=[];
+let currentPage='overview';
+const $=id=>document.getElementById(id);
+function persist(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function selectedMonth(){return $('monthPicker').value||monthNow()}
+function txMonth(){return state.transactions.filter(t=>t.date&&t.date.slice(0,7)===selectedMonth())}
+function expenses(){return txMonth().filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount),0)}
+function incomeActual(){return txMonth().filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount),0)}
+function savedActual(){return txMonth().filter(t=>t.type==='saving').reduce((s,t)=>s+Number(t.amount),0)}
+function budgetSpent(b){return txMonth().filter(t=>t.type==='expense'&&(t.category===b.category || (b.id==='home'&&t.category==='บิลอื่น'&&/ห้อง|ค่าเช่า|น้ำ|ไฟ/i.test(t.note)))).reduce((s,t)=>s+Number(t.amount),0)}
+function plannedExpenses(){return state.budgets.reduce((s,b)=>s+Number(b.amount),0)}
+function renderHero(){
+ const exp=expenses(), inc=incomeActual(), sav=savedActual();
+ const baseRemaining=state.salary-plannedExpenses()-state.savingGoal;
+ const actualRemaining=plannedExpenses()-exp;
+ $('income').textContent=money(state.salary+inc);$('spent').textContent=money(exp);$('savingTarget').textContent=money(state.savingGoal);$('saved').textContent=money(sav);
+ $('available').textContent=money(actualRemaining);
+ $('heroNotice').textContent=`งบรายจ่ายรวม ${money(plannedExpenses())} · เงินออมเป้าหมาย ${money(state.savingGoal)} · เงินไม่จัดสรรตามแผน ${money(baseRemaining)}`;
+ $('available').className='big '+(actualRemaining<0?'red':'gold');
+}
+function renderBudgets(){
+ $('budgetList').innerHTML=state.budgets.map(b=>{
+ let spent=budgetSpent(b), pct=b.amount?Math.min(100,spent/b.amount*100):0, over=spent>b.amount;
+ return `<div class="budgetrow"><div class="budgettop"><div class="budgetname">${b.icon||'•'} ${esc(b.name)}</div><div class="budgetamount"><b class="${over?'red':''}">${money(spent)}</b> / ${money(b.amount)}</div></div><div class="progress"><i style="width:${pct}%;${over?'background:linear-gradient(90deg,#b9444a,#ff9a9d)':''}"></i></div><div class="alertline">${over?'⚠️ เกินงบ '+money(spent-b.amount):'เหลืองบ '+money(b.amount-spent)} · ${Math.round(pct)}%</div></div>`;
+ }).join('');
+}
+function txHTML(t,withDelete=true){
+ let sign=t.type==='income'?'+':t.type==='saving'?'↗':'−', cls=t.type==='income'?'green':t.type==='saving'?'gold':'';
+ return `<div class="transaction"><div class="txicon">${icons[t.category]||'฿'}</div><div class="txmain"><b>${esc(t.note||t.category)}</b><small>${esc(t.date)} · ${esc(t.category)} · ${esc(t.account)}</small></div><div class="txamount ${cls}">${sign}${money(t.amount)}${withDelete?`<div><button class="secondary del" data-id="${t.id}" style="padding:4px 7px;margin-top:5px;font-size:10px">ลบ</button></div>`:''}</div></div>`;
+}
+function renderLists(){
+ const sorted=txMonth().slice().sort((a,b)=>b.date.localeCompare(a.date)||b.created-a.created);
+ $('recentList').innerHTML=sorted.length?sorted.slice(0,5).map(t=>txHTML(t)).join(''):'<div class="empty">ยังไม่มีรายการเดือนนี้<br>กด “บันทึก” เพื่อเริ่มติดตามเงินของพลอย</div>';
+ const q=($('filter').value||'').toLowerCase();
+ const all=sorted.filter(t=>[t.note,t.category,t.account,t.date].join(' ').toLowerCase().includes(q));
+ $('historyList').innerHTML=all.length?all.map(t=>txHTML(t)).join(''):'<div class="empty">ไม่พบรายการ</div>';
+ $('historyCount').textContent=all.length+' รายการ';
+ document.querySelectorAll('.del').forEach(btn=>btn.onclick=()=>{if(confirm('ลบรายการนี้ใช่ไหม?')){state.transactions=state.transactions.filter(t=>t.id!==btn.dataset.id);persist();}});
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderSettings(){
+ $('salary').value=state.salary;$('saveGoal').value=state.savingGoal;
+ $('budgetInputs').innerHTML=state.budgets.map((b,i)=>`<div class="field" style="margin:10px 0"><label for="bud${i}">${esc(b.name)}</label><input id="bud${i}" type="number" min="0" step="1" value="${b.amount}" data-budget="${i}"></div>`).join('');
+}
+function render(){renderHero();renderBudgets();renderLists();renderSettings();fillCategories();checkAlerts()}
+function fillCategories(){
+ let typ=$('type').value, list=typ==='income'?['เงินเดือน','อื่นๆ']:typ==='saving'?['เงินออม']:cats.filter(c=>c!=='เงินเดือน'&&c!=='เงินออม');
+ const old=$('category').value;
+ $('category').innerHTML=list.map(c=>`<option>${c}</option>`).join('');
+ if(list.includes(old))$('category').value=old;
+}
+function setPage(page){
+ currentPage=page;
+ ['overview','add','history','settings'].forEach(p=>$(p+'Page').classList.toggle('hidden',p!==page));
+ document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+ if(page==='add'){$('date').value=$('date').value||today()}
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.page)));
+$('viewAll').onclick=()=>setPage('history');
+$('monthPicker').value=monthNow();$('monthPicker').onchange=render;
+$('date').value=today();$('type').onchange=fillCategories;
+$('txForm').onsubmit=e=>{
+ e.preventDefault();const amount=Number($('amount').value);if(!amount||amount<=0)return;
+ const type=$('type').value,category=$('category').value;
+ state.transactions.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),type,amount,category,account:$('account').value,date:$('date').value||today(),note:$('note').value.trim(),created:Date.now()});
+ const b=state.budgets.find(x=>x.category===category);
+ if(type==='expense'&&b&&budgetSpent({...b})+amount>=b.amount)notify(`งบ${category}ใกล้เต็มหรือเกินแล้ว`,`บันทึกรายจ่าย ${money(amount)} · หมวด ${category}`);
+ $('amount').value='';$('note').value='';persist();setPage('overview');
+};
+$('settingsForm').onsubmit=e=>{e.preventDefault();state.salary=Math.max(0,Number($('salary').value)||0);state.savingGoal=Math.max(0,Number($('saveGoal').value)||0);state.budgets=state.budgets.map((b,i)=>({...b,amount:Math.max(0,Number($('bud'+i).value)||0)}));persist();alert('บันทึกงบประมาณแล้วค่ะ')};
+$('filter').oninput=renderLists;
+function notify(title,body){
+ if('Notification'in window&&Notification.permission==='granted'){try{new Notification(title,{body,icon:'icon-192.png'})}catch(e){}}
+}
+function checkAlerts(){
+ if(!state.alerts)return;
+ const warned=JSON.parse(sessionStorage.getItem('ployWarned')||'{}');
+ state.budgets.forEach(b=>{const sp=budgetSpent(b),pct=b.amount?sp/b.amount:0,key=selectedMonth()+b.id;
+ if(pct>=1&&!warned[key+'100']){warned[key+'100']=true;notify('งบหมวด '+b.name+' เต็มแล้ว','ใช้ '+money(sp)+' จากงบ '+money(b.amount))}
+ else if(pct>=.9&&!warned[key+'90']){warned[key+'90']=true;notify('งบหมวด '+b.name+' ใกล้เต็ม 90%','ใช้แล้ว '+money(sp)+' จาก '+money(b.amount))}
+ else if(pct>=.7&&!warned[key+'70']){warned[key+'70']=true;notify('งบหมวด '+b.name+' ใช้ไป 70%','เหลือ '+money(b.amount-sp))}
+ });
+ sessionStorage.setItem('ployWarned',JSON.stringify(warned));
+}
+$('notifyBtn').onclick=async()=>{
+ if(!('Notification'in window)){$('notifyStatus').textContent='เบราว์เซอร์นี้ไม่รองรับ Notification';return}
+ try{let p=await Notification.requestPermission();$('notifyStatus').textContent=p==='granted'?'เปิดการแจ้งเตือนแล้วค่ะ (การเตือนงบตรวจเมื่อเปิดเว็บ)':'ยังไม่ได้อนุญาตการแจ้งเตือน';if(p==='granted')notify('Ploy Money Diary','เปิดการแจ้งเตือนเรียบร้อย')}
+ catch(e){$('notifyStatus').textContent='ไม่สามารถขอสิทธิ์แจ้งเตือนได้ในโหมดนี้'}
+};
+$('testNotify').onclick=()=>notify('ทดสอบแจ้งเตือน','นี่คือตัวอย่างการแจ้งเตือนจาก Ploy Money Diary');
+$('exportBtn').onclick=()=>{
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ploy-money-backup-'+selectedMonth()+'.json';a.click();URL.revokeObjectURL(a.href);
+};
+$('csvBtn').onclick=()=>{
+ const rows=[['date','type','amount','category','account','note'],...txMonth().map(t=>[t.date,t.type,t.amount,t.category,t.account,t.note])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='ploy-money-'+selectedMonth()+'.csv';a.click();URL.revokeObjectURL(a.href);
+};
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!data.budgets||!data.transactions)throw Error();if(confirm('นำเข้าข้อมูลจะแทนที่ข้อมูลปัจจุบัน ต้องการทำต่อไหม?')){state=data;persist();alert('นำเข้าข้อมูลสำเร็จ')}}catch(err){alert('ไฟล์สำรองไม่ถูกต้อง')}e.target.value=''};
+$('clearBtn').onclick=()=>{if(confirm('แน่ใจหรือไม่ว่าจะลบรายการและงบทั้งหมดในเครื่องนี้? แนะนำส่งออกข้อมูลสำรองก่อน')){state=fresh();persist();alert('ล้างข้อมูลแล้ว')}};
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script>
+</body></html>
