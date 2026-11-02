@@ -26,7 +26,8 @@
  <div class="label">งบรายจ่ายที่ยังใช้ได้เดือนนี้</div>
  <div class="big gold" id="available">฿1,171</div>
  <div class="stats">
-  <div class="stat"><div class="label">รายรับสุทธิ</div><strong id="income">฿28,351</strong></div>
+  <div class="stat"><div class="label">เงินเดือนตามแผน</div><strong id="income">฿28,351</strong></div>
+  <div class="stat"><div class="label">รายรับจริงเดือนนี้</div><strong class="green" id="incomeActual">฿0</strong></div>
   <div class="stat"><div class="label">จ่ายจริงเดือนนี้</div><strong id="spent">฿0</strong></div>
   <div class="stat"><div class="label">เป้าหมายออม</div><strong id="savingTarget">฿1,500</strong></div>
   <div class="stat"><div class="label">ออมแล้ว</div><strong class="green" id="saved">฿0</strong></div>
@@ -63,7 +64,7 @@
  <div class="actions"><button class="secondary" id="exportBtn">ส่งออกข้อมูลสำรอง JSON</button><button class="secondary" id="csvBtn">ส่งออก CSV</button></div>
 </section>
 <section id="reportPage" class="hidden">
- <div class="section-title"><h2>รายงานการเงิน</h2><span>สรุปจากรายการที่บันทึกจริง</span></div>
+ <div class="section-title"><h2>รายงานการเงิน</h2><span>สรุปเฉพาะรายการที่บันทึกจริง</span></div>
  <div class="card"><div class="formgrid">
   <div class="field"><label for="reportPeriod">ช่วงรายงาน</label><select id="reportPeriod"><option value="month">รายเดือน</option><option value="3months">ย้อนหลัง 3 เดือน</option></select></div>
   <div class="field"><label for="reportMonth">เดือนอ้างอิง</label><input id="reportMonth" type="month"></div>
@@ -87,7 +88,7 @@
  <div class="section-title"><h2>ตั้งค่างบประมาณ</h2><span>แก้ไขได้ตามจริง</span></div>
  <form class="card" id="settingsForm">
   <div class="formgrid">
-   <div class="field full"><label for="salary">รายรับสุทธิต่อเดือน</label><input id="salary" type="number" min="0" required></div>
+   <div class="field full"><label for="salary">เงินเดือนสุทธิตามแผนต่อเดือน (ไม่ถือเป็นรายรับจริงในรายงาน)</label><input id="salary" type="number" min="0" required></div>
    <div class="field full"><label for="saveGoal">เป้าหมายออมต่อเดือน</label><input id="saveGoal" type="number" min="0" required></div>
   </div>
   <div class="section-title"><h2>งบแยกหมวด</h2></div><div id="budgetInputs"></div>
@@ -109,7 +110,7 @@
 <script>
 const KEY='ployMoneyDiary_v1';
 const defaultBudgets=[
- {id:'home',name:'ห้อง + น้ำ + ไฟ',amount:10000,icon:'⌂',category:'บิลอื่น'},
+ {id:'home',name:'ห้อง + น้ำ + ไฟ',amount:10000,icon:'⌂',category:'ค่าห้อง/น้ำ/ไฟ'},
  {id:'travel',name:'เดินทางวันทำงาน',amount:2860,icon:'🚆',category:'เดินทาง'},
  {id:'food',name:'อาหารวันทำงาน',amount:5500,icon:'🍱',category:'อาหาร'},
  {id:'weekend',name:'ค่าใช้จ่ายวันหยุด',amount:2000,icon:'☕',category:'เที่ยวสังคม'},
@@ -120,8 +121,8 @@ const defaultBudgets=[
  {id:'social',name:'สังคม/เที่ยวเพิ่มเติม',amount:200,icon:'♡',category:'เที่ยวสังคม'},
  {id:'misc',name:'เงินสำรองจิปาถะ',amount:271,icon:'＋',category:'บิลอื่น'}
 ];
-const cats=['อาหาร','เดินทาง','ช้อปปิ้ง','กาแฟขนม','เที่ยวสังคม','สกินแคร์','บิลอื่น','เงินออม','เงินเดือน','อื่นๆ'];
-const icons={'อาหาร':'🍱','เดินทาง':'🚆','ช้อปปิ้ง':'🛍️','กาแฟขนม':'☕','เที่ยวสังคม':'♡','สกินแคร์':'✦','บิลอื่น':'▣','เงินออม':'🐷','เงินเดือน':'✦','อื่นๆ':'＋'};
+const cats=['อาหาร','เดินทาง','ช้อปปิ้ง','กาแฟขนม','เที่ยวสังคม','สกินแคร์','ค่าห้อง/น้ำ/ไฟ','บิลอื่น','เงินออม','เงินเดือน','อื่นๆ'];
+const icons={'อาหาร':'🍱','เดินทาง':'🚆','ช้อปปิ้ง':'🛍️','กาแฟขนม':'☕','เที่ยวสังคม':'♡','สกินแคร์':'✦','ค่าห้อง/น้ำ/ไฟ':'⌂','บิลอื่น':'▣','เงินออม':'🐷','เงินเดือน':'✦','อื่นๆ':'＋'};
 const money=n=>'฿'+Number(n||0).toLocaleString('th-TH',{maximumFractionDigits:2});
 const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const monthNow=()=>today().slice(0,7);
@@ -130,15 +131,14 @@ let state;
 try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){state=fresh()}
 if(!state.budgets)state.budgets=defaultBudgets;
 if(!state.transactions)state.transactions=[];
-// One-time budget split migration. Keeps all saved transactions and other settings.
-if(!state.budgetSplitFoodCoffeeV1){
- const food=state.budgets.find(b=>b.id==='food');
- const coffee=state.budgets.find(b=>b.id==='coffee');
- if(food)food.amount=5500;
- if(coffee)coffee.amount=1320;
- state.budgetSplitFoodCoffeeV1=true;
+// One-time category migration: separate home costs from miscellaneous bills without touching transactions.
+if(!state.homeCategoryV1){
+ const homeBudget=state.budgets.find(b=>b.id==='home');
+ if(homeBudget)homeBudget.category='ค่าห้อง/น้ำ/ไฟ';
+ state.homeCategoryV1=true;
  localStorage.setItem(KEY,JSON.stringify(state));
 }
+// No budget-amount migration: preserve the user's existing budget values.
 let currentPage='overview';
 const $=id=>document.getElementById(id);
 function persist(){localStorage.setItem(KEY,JSON.stringify(state));render()}
@@ -164,9 +164,10 @@ function categorySpent(category,rows){return rows.filter(t=>t.type==='expense'&&
 function renderHero(){
  const exp=expenses(),inc=incomeActual(),sav=savedActual();
  const plan=plannedExpenses(),baseRemaining=state.salary-plan-state.savingGoal,actualRemaining=plan-exp;
- $('income').textContent=money(state.salary+inc);$('spent').textContent=money(exp);$('savingTarget').textContent=money(state.savingGoal);$('saved').textContent=money(sav);
+ // Planned salary is a planning figure only; actual income comes only from saved income transactions.
+ $('income').textContent=money(state.salary);$('incomeActual').textContent=money(inc);$('spent').textContent=money(exp);$('savingTarget').textContent=money(state.savingGoal);$('saved').textContent=money(sav);
  $('available').textContent=money(actualRemaining);
- $('heroNotice').textContent=`งบตามแผน ${money(plan)} · ใช้จริง ${money(exp)} · ${actualRemaining<0?'เกินงบ '+money(-actualRemaining):'งบคงเหลือ '+money(actualRemaining)} · เงินออมเป้าหมาย ${money(state.savingGoal)} · เงินไม่จัดสรรตามแผน ${money(baseRemaining)}`;
+ $('heroNotice').textContent=`เงินเดือนตามแผน ${money(state.salary)} · รายรับจริงที่บันทึก ${money(inc)} · งบรายจ่ายตามแผน ${money(plan)} · ใช้จริง ${money(exp)} · ${actualRemaining<0?'เกินงบ '+money(-actualRemaining):'งบคงเหลือ '+money(actualRemaining)} · เงินออมเป้าหมาย ${money(state.savingGoal)} · เงินไม่จัดสรรตามแผน ${money(baseRemaining)}`;
  $('available').className='big '+(actualRemaining<0?'red':'gold');
 }
 function renderBudgets(){
@@ -191,13 +192,23 @@ function renderLists(){
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function renderSettings(){
  $('salary').value=state.salary;$('saveGoal').value=state.savingGoal;
- $('budgetInputs').innerHTML=state.budgets.map((b,i)=>`<div class="field" style="margin:10px 0"><label for="bud${i}">${esc(b.name)}</label><input id="bud${i}" type="number" min="0" step="1" value="${b.amount}" data-budget="${i}"></div>`).join('');
+ $('budgetInputs').innerHTML=state.budgets.map((b,i)=>`<div class="field" style="margin:10px 0"><label for="bud${i}">${esc(b.name)} <span style="color:var(--muted);font-weight:400">· หมวดบันทึก: ${esc(b.category||'อื่นๆ')}</span></label><input id="bud${i}" type="number" min="0" step="1" value="${b.amount}" data-budget="${i}"></div>`).join('');
 }
 function render(){renderHero();renderBudgets();renderLists();renderSettings();fillCategories();checkAlerts();if(currentPage==='report')renderReport()}
 function fillCategories(){
- let typ=$('type').value, list=typ==='income'?['เงินเดือน','อื่นๆ']:typ==='saving'?['เงินออม']:cats.filter(c=>c!=='เงินเดือน'&&c!=='เงินออม');
+ const typ=$('type').value;
+ let list;
+ if(typ==='income'){
+  list=['เงินเดือน','อื่นๆ',...state.transactions.filter(t=>t.type==='income').map(t=>t.category).filter(Boolean)];
+ }else if(typ==='saving'){
+  list=['เงินออม',...state.transactions.filter(t=>t.type==='saving').map(t=>t.category).filter(Boolean)];
+ }else{
+  // Keep the entry form aligned with every budget category, standard category, and legacy category already used.
+  list=[...cats.filter(c=>c!=='เงินเดือน'&&c!=='เงินออม'),...state.budgets.map(b=>b.category||'อื่นๆ'),...state.transactions.filter(t=>t.type==='expense').map(t=>t.category).filter(Boolean)];
+ }
+ list=[...new Set(list)];
  const old=$('category').value;
- $('category').innerHTML=list.map(c=>`<option>${c}</option>`).join('');
+ $('category').innerHTML=list.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
  if(list.includes(old))$('category').value=old;
 }
 function setPage(page){
