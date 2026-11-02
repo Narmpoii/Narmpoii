@@ -1,5 +1,5 @@
 
-const CACHE = 'narmpoii-v3';
+const CACHE = 'narmpoii-v4';
 
 const ASSETS = [
   './',
